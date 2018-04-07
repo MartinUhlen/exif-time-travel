@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>se.martinuhlen</groupId>
+	<artifactId>exif-time-travel</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Exif Time Travel</name>
+	<description>Change exif time on image batches.</description>
+
+	<repositories>
+		<repository>
+			<id>Adobe</id>
+			<url>https://repo.adobe.com/nexus/content/repositories/public</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-imaging</artifactId>
+			<!-- <version>1.0-R1534292</version> -->
+			<version>1.0-R1480221</version>
+		</dependency>
+	</dependencies>
+
+</project>
