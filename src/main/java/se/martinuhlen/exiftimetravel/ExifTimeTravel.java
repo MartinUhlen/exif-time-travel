@@ -18,7 +18,6 @@ import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfoAscii;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
-import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 
 public class ExifTimeTravel
@@ -30,7 +29,7 @@ public class ExifTimeTravel
 	public static void main(String[] args) throws Exception
 	{
 		final File sourceDir = new File("/media/data/Photos/Fiske/Temp");
-		final int hourDiff = 1;
+		final int hourDiff = 0;
 		final int minuteDiff = 0;
 		final String outputFormat = "yyyyMMdd_HHmmss";
 		final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern(outputFormat);
@@ -56,9 +55,18 @@ public class ExifTimeTravel
 			exifDirectory.add(EXIF_TAG_DATE_TIME_DIGITIZED, newTime.format(EXIF_TIME_FORMAT));
 
 			TiffOutputDirectory rootDirectory = outputSet.getRootDirectory();
-			TiffOutputField rootDateTimeField = rootDirectory.getFields().stream().filter(f -> f.tagInfo.name.equals("DateTime")).findAny().get();
-			rootDirectory.removeField(rootDateTimeField.tagInfo);
-			rootDirectory.add((TagInfoAscii) rootDateTimeField.tagInfo, newTime.format(EXIF_TIME_FORMAT));
+			rootDirectory.getFields().stream().filter(f -> f.tagInfo.name.equals("DateTime")).findAny().ifPresent(rootDateTimeField ->
+			{
+				try
+				{
+					rootDirectory.removeField(rootDateTimeField.tagInfo);
+					rootDirectory.add((TagInfoAscii) rootDateTimeField.tagInfo, newTime.format(EXIF_TIME_FORMAT));
+				}
+				catch (ImageWriteException e)
+				{
+					throw new RuntimeException(e);
+				}
+			});
 
 			outputSet.getDirectories().stream().filter(dir -> dir.description().equals("Sub")).findAny().ifPresent(subDirectory ->
 			{
